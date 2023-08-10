@@ -1,30 +1,43 @@
-NAME = libasm.a
+# all: $(LIB)
 
-NASM = nasm
-NASM_FLAGS = -f elf64
+# $(LIB): $(OBJS)
+# 	@echo "$(GREEN)=> Building $@$(RESET)"
+# 	@ar rcs $(LIB) $(OBJS)
 
-SRCS	:= ft_strlen.s
-OBJS	:= $(SRCS:.s=.o)
+# %.o: %.s
+# 	@$(NASM) $(NASM_FLAGS) $<
+# 	@echo "$(GREEN)✓ $@ compiled$(RESET)"
+
+# .PHONY: all clean fclean re run rerun
+
+LIB		:= libasm.a
+TEST	:= test
+S		:= srcs
+O		:= objs
+SRCS	:= $(wildcard $S/*.s)
+OBJS	:= $(SRCS:$S/%.s=$O/%.o)
 
 RESET	:= \033[0m
-RED		:= \033[31m
-GREEN	:= \033[32m
+GREEN	:= \033[1m\033[32m
 
-all: $(NAME)
+all: $(LIB)
 
-$(NAME): $(OBJS)
-	@echo "$(GREEN)=> Building $@$(RESET)"
-	@ar rcs $(NAME) $(OBJS)
+$O:
+	@mkdir -p $O
 
-%.o: %.s
-	@$(NASM) $(NASM_FLAGS) $<
+$O/%.o: $S/%.s | $O
+	@nasm -f elf64 $< -o $@
 	@echo "$(GREEN)✓ $@ compiled$(RESET)"
 
+$(LIB): $(OBJS)
+	@ar rcs $@ $^
+	@echo "$(GREEN)=> $@ compiled$(RESET)"
+
 clean:
-	@rm -f $(OBJS)
+	rm -rf $O
 
 fclean: clean
-	@rm -f $(NAME) ./test
+	rm -rf $(LIB) $(TEST)
 
 re: fclean all
 
@@ -36,4 +49,4 @@ run: all
 
 rerun: fclean run
 
-.PHONY: all clean fclean re run rerun
+.PHONY: all clean
