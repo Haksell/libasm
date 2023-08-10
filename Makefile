@@ -1,15 +1,3 @@
-# all: $(LIB)
-
-# $(LIB): $(OBJS)
-# 	@echo "$(GREEN)=> Building $@$(RESET)"
-# 	@ar rcs $(LIB) $(OBJS)
-
-# %.o: %.s
-# 	@$(NASM) $(NASM_FLAGS) $<
-# 	@echo "$(GREEN)✓ $@ compiled$(RESET)"
-
-# .PHONY: all clean fclean re run rerun
-
 LIB		:= libasm.a
 TEST	:= test
 S		:= srcs
@@ -42,10 +30,10 @@ fclean: clean
 re: fclean all
 
 run: all
-	@cc -o ./test main.c -L. -lasm
-	@echo "$(GREEN)=> Running tests$(RESET)"
-	@./test
-	@rm ./test
+	@cc -o $(TEST) main.c -L. -lasm
+	@echo "$(GREEN)=> Running tests$(RESET)\n"
+	@./$(TEST)
+	@rm $(TEST)
 
 rerun: fclean run
 
