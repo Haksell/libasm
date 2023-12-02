@@ -3,7 +3,7 @@ NAME = libasm.a
 NASM = nasm
 NASM_FLAGS = -f elf64
 
-SRCS = ft_strcpy.s ft_strlen.s
+SRCS = ft_strcpy.s ft_strlen.s ft_strcmp.s
 OBJS = $(SRCS:.s=.o)
 
 all: $(NAME)
