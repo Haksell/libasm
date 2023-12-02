@@ -7,7 +7,7 @@ SRCS = ft_strcpy.s ft_strlen.s ft_strcmp.s
 OBJS = $(SRCS:.s=.o)
 
 all: $(NAME)
-	echo "Compiling..."
+	@echo "Compiling..."
 
 $(NAME): $(OBJS)
 	ar rcs $(NAME) $(OBJS)
@@ -24,10 +24,9 @@ fclean: clean
 re: fclean all
 
 run: all
-	echo "Running..."
+	@echo "Running..."
 	cc -o test main.c -L. -lasm
-	./test
+	@echo "========================================"
+	@./test
 
-.PHONY: all clean fclean re run
-
-.SILENT: all run
+rerun: fclean run
