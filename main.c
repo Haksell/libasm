@@ -13,6 +13,7 @@ extern size_t	ft_strlen(const char *s);
 extern char		*ft_strcpy(char *dest, const char *src);
 extern int		ft_strcmp(const char *s1, const char *s2);
 ssize_t			ft_write(int fd, const void *buf, size_t count);
+ssize_t			ft_read(int fd, void *buf, size_t count);
 
 void test_strlen() {
 	const char		*test_str = "Hello, World!";
@@ -64,7 +65,7 @@ void test_write() {
 	errno = 0;
 	printf("return value: %zd | ", write(1, "Wesh la famille !\n", 18));
 	printf("errno: %d\n", errno);
-	printf("return value: %zd | ", write(open("/dev/full", O_RDONLY), "lol\n", 4));
+	printf("return value: %zd | ", write(open("/dev/full", O_RDWR), "lol\n", 4));
 	printf("errno: %d\n", errno);
 	printf("return value: %zd | ", write(4162412, "lol\n", 4));
 	printf("errno: %d\n", errno);
@@ -74,12 +75,21 @@ void test_write() {
 	errno = 0;
 	printf("return value: %zd | ", ft_write(1, "Wesh la famille !\n", 18));
 	printf("errno: %d\n", errno);
-	printf("return value: %zd | ", ft_write(open("/dev/full", O_RDONLY), "lol\n", 4));
+	printf("return value: %zd | ", ft_write(open("/dev/full", O_RDWR), "lol\n", 4));
 	printf("errno: %d\n", errno);
 	printf("return value: %zd | ", ft_write(4162412, "lol\n", 4));
 	printf("errno: %d\n", errno);
 	printf("return value: %zd | ", ft_write(1, NULL, 18));
 	printf("errno: %d\n", errno);
+}
+
+void test_read() {
+	printf("=== TEST FT_READ ===\n");
+	errno = 0;
+	char buf[10];
+	ssize_t ret = ft_read(open("Makefile", O_RDONLY), buf, sizeof(buf) - 1);
+	buf[sizeof(buf) - 1] = '\0';
+	printf("buf: %s | return value: %zd | errno: %d\n", buf, ret, errno);
 }
 
 int	main(void)
@@ -88,5 +98,6 @@ int	main(void)
 	test_strcpy();
 	test_strcmp();
 	test_write();
+	test_read();
 	return (0);
 }
