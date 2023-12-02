@@ -36,6 +36,8 @@ void test_strcpy() {
 }
 
 void test_strcmp() {
+	printf("=== TEST STRCMP ===\n");
+
 	char	a1[] = "abcde";
 	char	a2[] = "abcde";
 	printf("%s | %s | %d | %d\n", a1, a2, strcmp(a1, a2), ft_strcmp(a1, a2));
