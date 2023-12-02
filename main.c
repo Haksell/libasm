@@ -44,19 +44,19 @@ void test_strcmp() {
 	printf("%s | %s | %d | %d\n", a1, a2, strcmp(a1, a2), ft_strcmp(a1, a2));
 
 	char	b1[] = "abcde";
-	char	b2[] = "abcdz";
+	char	b2[] = "abcda";
 	printf("%s | %s | %d | %d\n", b1, b2, strcmp(b1, b2), ft_strcmp(b1, b2));
 
 	char	c1[] = "abcde";
-	char	c2[] = "abcd";
+	char	c2[] = "abcdz";
 	printf("%s | %s | %d | %d\n", c1, c2, strcmp(c1, c2), ft_strcmp(c1, c2));
 
 	char	d1[] = "abcde";
-	char	d2[] = "abcdef";
+	char	d2[] = "abcd";
 	printf("%s | %s | %d | %d\n", d1, d2, strcmp(d1, d2), ft_strcmp(d1, d2));
 
 	char	e1[] = "abcde";
-	char	e2[] = "abcda";
+	char	e2[] = "abcdef";
 	printf("%s | %s | %d | %d\n", e1, e2, strcmp(e1, e2), ft_strcmp(e1, e2));
 }
 
