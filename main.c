@@ -1,21 +1,18 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: axbrisse <axbrisse@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/10 08:51:10 by axbrisse          #+#    #+#             */
-/*   Updated: 2023/08/10 08:51:35 by axbrisse         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
+#include <errno.h>
+#include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+extern int errno;
 
 extern size_t	ft_strlen(const char *s);
 extern char		*ft_strcpy(char *dest, const char *src);
 extern int		ft_strcmp(const char *s1, const char *s2);
+ssize_t			ft_write(int fd, const void *buf, size_t count);
 
 void test_strlen() {
 	const char		*test_str = "Hello, World!";
@@ -60,10 +57,34 @@ void test_strcmp() {
 	printf("%s | %s | %d | %d\n", e1, e2, strcmp(e1, e2), ft_strcmp(e1, e2));
 }
 
+void test_write() {
+	printf("=== TEST WRITE ===\n");
+	errno = 0;
+	printf("return value: %zd | ", write(1, "Wesh la famille !\n", 18));
+	printf("errno: %d\n", errno);
+	printf("return value: %zd | ", write(open("/dev/full", O_RDONLY), "lol\n", 4));
+	printf("errno: %d\n", errno);
+	printf("return value: %zd | ", write(4162412, "lol\n", 4));
+	printf("errno: %d\n", errno);
+	printf("return value: %zd | ", write(1, NULL, 18));
+	printf("errno: %d\n", errno);
+	printf("=== TEST FT_WRITE ===\n");
+	errno = 0;
+	printf("return value: %zd | ", ft_write(1, "Wesh la famille !\n", 18));
+	printf("errno: %d\n", errno);
+	printf("return value: %zd | ", ft_write(open("/dev/full", O_RDONLY), "lol\n", 4));
+	printf("errno: %d\n", errno);
+	printf("return value: %zd | ", ft_write(4162412, "lol\n", 4));
+	printf("errno: %d\n", errno);
+	printf("return value: %zd | ", ft_write(1, NULL, 18));
+	printf("errno: %d\n", errno);
+}
+
 int	main(void)
 {
 	test_strlen();
 	test_strcpy();
 	test_strcmp();
+	test_write();
 	return (0);
 }

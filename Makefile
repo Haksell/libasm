@@ -29,7 +29,7 @@ re: fclean all
 
 run: all
 	@echo "Running..."
-	cc -o test main.c -L. -lasm
+	cc -fsanitize=address,undefined -o test main.c -L. -lasm
 	@echo "========================================"
 	@./test
 
