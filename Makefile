@@ -1,22 +1,26 @@
 NAME = libasm.a
 
-NASM = nasm
-NASM_FLAGS = -f elf64
+PATH_SRCS := srcs
+PATH_OBJS := objs
 
-SRCS = ft_strcpy.s ft_strlen.s ft_strcmp.s
-OBJS = $(SRCS:.s=.o)
+FILENAMES := $(notdir $(basename $(wildcard $(PATH_SRCS)/*.s)))
+SRCS := $(addprefix $(PATH_SRCS)/, $(addsuffix .s, $(FILENAMES)))
+OBJS := $(addprefix $(PATH_OBJS)/, $(addsuffix .o, $(FILENAMES)))
 
 all: $(NAME)
-	@echo "Compiling..."
 
 $(NAME): $(OBJS)
+	@echo "Compiling..."
 	ar rcs $(NAME) $(OBJS)
 
-%.o: %.s
-	$(NASM) $(NASM_FLAGS) $<
+$(PATH_OBJS):
+	@mkdir $(PATH_OBJS)
+
+$(OBJS): $(PATH_OBJS)/%.o: $(PATH_SRCS)/%.s | $(PATH_OBJS)
+	nasm -f elf64 $< -o $@
 
 clean:
-	rm -f $(OBJS)
+	rm -rf $(PATH_OBJS)
 
 fclean: clean
 	rm -f $(NAME) ./test
