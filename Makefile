@@ -5,24 +5,27 @@ O		:= objs
 SRCS	:= $(wildcard $S/*.s)
 OBJS	:= $(SRCS:$S/%.s=$O/%.o)
 
-RESET	:= \033[0m
-GREEN	:= \033[1m\033[32m
+PATH_SRCS := srcs
+PATH_OBJS := objs
 
-all: $(LIB)
+FILENAMES := $(notdir $(basename $(wildcard $(PATH_SRCS)/*.s)))
+SRCS := $(addprefix $(PATH_SRCS)/, $(addsuffix .s, $(FILENAMES)))
+OBJS := $(addprefix $(PATH_OBJS)/, $(addsuffix .o, $(FILENAMES)))
 
-$O:
-	@mkdir -p $O
+all: $(NAME)
 
-$O/%.o: $S/%.s | $O
-	@nasm -f elf64 $< -o $@
-	@echo "$(GREEN)✓ $@ compiled$(RESET)"
+$(NAME): $(OBJS)
+	@echo "Compiling..."
+	ar rcs $(NAME) $(OBJS)
 
-$(LIB): $(OBJS)
-	@ar rcs $@ $^
-	@echo "$(GREEN)=> $@ compiled$(RESET)"
+$(PATH_OBJS):
+	@mkdir $(PATH_OBJS)
+
+$(OBJS): $(PATH_OBJS)/%.o: $(PATH_SRCS)/%.s | $(PATH_OBJS)
+	nasm -f elf64 $< -o $@
 
 clean:
-	rm -rf $O
+	rm -rf $(PATH_OBJS)82cda007297423217eb
 
 fclean: clean
 	rm -rf $(LIB) $(TEST)
@@ -30,11 +33,9 @@ fclean: clean
 re: fclean all
 
 run: all
-	@cc -o $(TEST) main.c -L. -lasm
-	@echo "$(GREEN)=> Running tests$(RESET)\n"
-	@./$(TEST)
-	@rm $(TEST)
+	@echo "Running..."
+	cc -fsanitize=address,undefined -o test main.c -L. -lasm
+	@echo "========================================"
+	@./test
 
 rerun: fclean run
-
-.PHONY: all clean
