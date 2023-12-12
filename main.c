@@ -84,11 +84,39 @@ void test_write() {
 }
 
 void test_read() {
+	char buf[32];
+	ssize_t ret = 0;
+
+	printf("=== TEST READ ===\n");
+	errno = 0;
+	ret = 0;
+	bzero(buf, sizeof(buf));
+	ret = read(open("Makefile", O_RDONLY), buf, sizeof(buf) - 1);
+	printf("buf: %s | return value: %zd | errno: %d\n", buf, ret, errno);
+	bzero(buf, sizeof(buf));
+	ret = read(open(".gitignore", O_RDONLY), buf, sizeof(buf) - 1);
+	printf("buf: %s | return value: %zd | errno: %d\n", buf, ret, errno);
+	bzero(buf, sizeof(buf));
+	ret = read(open("jexistepas", O_RDONLY), buf, sizeof(buf) - 1);
+	printf("buf: %s | return value: %zd | errno: %d\n", buf, ret, errno);
+	bzero(buf, sizeof(buf));
+	ret = read(open("srcs", O_RDONLY), buf, sizeof(buf) - 1);
+	printf("buf: %s | return value: %zd | errno: %d\n", buf, ret, errno);
+
 	printf("=== TEST FT_READ ===\n");
 	errno = 0;
-	char buf[10];
-	ssize_t ret = ft_read(open("Makefile", O_RDONLY), buf, sizeof(buf) - 1);
-	buf[sizeof(buf) - 1] = '\0';
+	ret = 0;
+	bzero(buf, sizeof(buf));
+	ret = ft_read(open("Makefile", O_RDONLY), buf, sizeof(buf) - 1);
+	printf("buf: %s | return value: %zd | errno: %d\n", buf, ret, errno);
+	bzero(buf, sizeof(buf));
+	ret = ft_read(open(".gitignore", O_RDONLY), buf, sizeof(buf) - 1);
+	printf("buf: %s | return value: %zd | errno: %d\n", buf, ret, errno);
+	bzero(buf, sizeof(buf));
+	ret = ft_read(open("jexistepas", O_RDONLY), buf, sizeof(buf) - 1);
+	printf("buf: %s | return value: %zd | errno: %d\n", buf, ret, errno);
+	bzero(buf, sizeof(buf));
+	ret = ft_read(open("srcs", O_RDONLY), buf, sizeof(buf) - 1);
 	printf("buf: %s | return value: %zd | errno: %d\n", buf, ret, errno);
 }
 

@@ -1,9 +1,5 @@
-LIB		:= libasm.a
-TEST	:= test
-S		:= srcs
-O		:= objs
-SRCS	:= $(wildcard $S/*.s)
-OBJS	:= $(SRCS:$S/%.s=$O/%.o)
+NAME := libasm.a
+TEST := test
 
 PATH_SRCS := srcs
 PATH_OBJS := objs
@@ -25,17 +21,17 @@ $(OBJS): $(PATH_OBJS)/%.o: $(PATH_SRCS)/%.s | $(PATH_OBJS)
 	nasm -f elf64 $< -o $@
 
 clean:
-	rm -rf $(PATH_OBJS)82cda007297423217eb
+	rm -rf $(PATH_OBJS)
 
 fclean: clean
-	rm -rf $(LIB) $(TEST)
+	rm -f $(NAME) $(TEST)
 
 re: fclean all
 
 run: all
 	@echo "Running..."
-	cc -fsanitize=address,undefined -o test main.c -L. -lasm
+	cc -fsanitize=address,undefined -o $(TEST) main.c -L. -lasm
 	@echo "========================================"
-	@./test
+	@./$(TEST)
 
 rerun: fclean run
