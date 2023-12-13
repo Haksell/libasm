@@ -64,13 +64,29 @@ ft_atoi_base:
         call ft_isspace
         pop rdi
         test rax, rax
-        jz .calculate
+        jz .get_sign
         inc rdi
         jmp .skip_whitespace
 
+    .get_sign:
+        mov rcx, 1
+        .loop:
+            cmp byte [rdi], '-'
+            je .negate
+            cmp byte [rdi], '+'
+            je .continue
+            jmp .calculate
+            .negate:
+                neg rcx
+            .continue:
+                inc rdi
+                jmp .loop
+
     .calculate:
         call ft_strlen
+        imul rax, rcx
         ret
+
 
     .invalid_base:
         ret
