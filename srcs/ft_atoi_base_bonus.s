@@ -1,8 +1,6 @@
 global ft_atoi_base
 extern ft_isspace, ft_strchr, ft_strlen
 
-section .text
-
 is_valid_base_char:
     and edi, 0xff
     call ft_isspace
@@ -104,6 +102,5 @@ ft_atoi_base:
         mov rax, r9
         imul rax, rcx
         ret
-
     .invalid_base:
         ret

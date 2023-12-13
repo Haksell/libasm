@@ -207,11 +207,10 @@ void test_isspace() {
 	ft_assert("ft_isspace", true);
 }
 
-void test_atoi_base_bad_base() {
+void test_atoi_base_bad_bases() {
 	char* bad_bases[] = {"aa", "abca", "abc ", "ab\tc", "-0+", "-42", "42+", "", "0", NULL};
 	for (size_t i = 0; bad_bases[i]; ++i) {
 		int ret = ft_atoi_base("42", bad_bases[i]);
-		printflush("%s\n", bad_bases[i]);
 		if (ret != 0) {
 			char buf[128] = {};
 			sprintf(buf, "ft_atoi_base(..., \"%s\") returned %d instead of 0", bad_bases[i], ret);
@@ -222,20 +221,62 @@ void test_atoi_base_bad_base() {
 	ft_assert("ft_atoi bad bases", true);
 }
 
+typedef struct s_atoi_base_test {
+	char* str;
+	char* base;
+	int expected_result;
+} t_atoi_base_test;
+
+void test_atoi_base_decimal() {
+	t_atoi_base_test tests[] = {{"111", "0123456789", 111},
+								{"  -4233", "0123456789", -4233},
+								{"\t+--42333", "0123456789", 42333},
+								{"\t  --++-12345lol42", "0123456789", -12345},
+								{"xd42", "0123456789", 0},
+								{"+ 42", "0123456789", 0},
+								{"", "0123456789", 0},
+								{"0000", "0123456789", 0},
+								{"0000042", "0123456789", 42},
+								{"-2147483649", "0123456789", 2147483647},
+								{"-2147483648", "0123456789", -2147483648},
+								{"-123456789", "0123456789", -123456789},
+								{"2147483647", "0123456789", 2147483647},
+								{"2147483648", "0123456789", -2147483648},
+								{NULL, 0}};
+	for (size_t i = 0; tests[i].str; ++i) {
+		int ret = ft_atoi_base(tests[i].str, "0123456789");
+		if (ret != tests[i].expected_result) {
+			char buf[128] = {};
+			sprintf(buf, "ft_atoi_base(\"%s\", ...) returned %d instead of %d", tests[i].str, ret,
+					tests[i].expected_result);
+			ft_assert(buf, false);
+			return;
+		}
+	}
+	ft_assert("ft_atoi decimal base", true);
+}
+
+void test_atoi_base_other_bases() {
+	t_atoi_base_test tests[] = {
+		{"101010", "01", 42}, {"2A", "0123456789ABCDEF", 42}, {"topo", "pouet", 526}, {NULL, 0}};
+	for (size_t i = 0; tests[i].str; ++i) {
+		int ret = ft_atoi_base(tests[i].str, tests[i].base);
+		if (ret != tests[i].expected_result) {
+			char buf[128] = {};
+			sprintf(buf, "ft_atoi_base(\"%s\", \"%s\") returned %d instead of %d", tests[i].str,
+					tests[i].base, ret, tests[i].expected_result);
+			ft_assert(buf, false);
+			return;
+		}
+	}
+	ft_assert("ft_atoi other bases", true);
+}
+
 void test_atoi_base() {
 	print_title("FT_ATOI_BASE");
-	test_atoi_base_bad_base();
-	printflush("| ");
-	printflush("%d ", ft_atoi_base("111", "0123456789"));
-	printflush("%d ", ft_atoi_base("  -4233", "0123456789"));
-	printflush("%d ", ft_atoi_base("\t+--42333", "0123456789"));
-	printflush("%d ", ft_atoi_base("\t  --++-12345lol42", "0123456789"));
-	printflush("| ");
-	printflush("%d ", ft_atoi_base("111", "012"));
-	printflush("%d ", ft_atoi_base("  -4233", "0123456789"));
-	printflush("%d ", ft_atoi_base("\t+--42333", "0123456789ABCDEF"));
-	printflush("%d ", ft_atoi_base("\t  --++-12345lol42", "0123456789ABCDEF"));
-	printflush("\n");
+	test_atoi_base_bad_bases();
+	test_atoi_base_decimal();
+	test_atoi_base_other_bases();
 }
 
 int main(void) {
