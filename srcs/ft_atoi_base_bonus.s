@@ -1,5 +1,9 @@
 global ft_atoi_base
-extern ft_isspace, ft_strchr
+extern ft_isspace, ft_strchr, ft_strlen
+
+extern strchr ; TODO: remove
+
+section .text
 
 is_valid_base_char:
     and edi, 0xff
@@ -17,22 +21,35 @@ is_valid_base_char:
         ret
 
 is_valid_base:
+    push rdi
+    call ft_strlen
+    pop rdi
+    cmp rax, 2
+    jl .no
     mov rsi, rdi
     mov rdx, rdi
     .loop:
         mov dil, byte [rsi]
         test dil, dil
-        jz .done
+        jz .yes
         call is_valid_base_char
         test rax, rax
         jz .no
+
         inc rsi
+        cmp byte [rsi], 0
+        jz .yes
+
+        push rsi
+        mov rdx, rdi
+        mov rdi, rsi
+        mov rsi, rdx
+        call strchr
+        pop rsi
+        test rax, rax
+        jnz .no
+
         jmp .loop
-    .done:
-        sub rsi, rdx
-        cmp rsi, 2
-        jl .no
-        jmp .yes
     .yes:
         mov rax, 1
         ret

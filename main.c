@@ -211,7 +211,8 @@ void test_atoi_base() {
 	printflush("=== TEST ATOI BASE ===\n");
 	printflush("%d ", ft_atoi_base("42", "01"));
 	printflush("%d ", ft_atoi_base("42", "0123456789"));
-	printflush("%d | ", ft_atoi_base("42", "0123456789ABCDEF"));
+	printflush("%d ", ft_atoi_base("42", "0123456789ABCDEF"));
+	printflush("| ");
 	printflush("%d ", ft_atoi_base("42", "aa"));
 	printflush("%d ", ft_atoi_base("42", "abca"));
 	printflush("%d ", ft_atoi_base("42", "abc "));
