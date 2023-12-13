@@ -34,8 +34,8 @@ typedef struct s_list {
 } t_list;
 
 void ft_list_push_front(t_list** begin_list, void* data);
-void ft_list_remove_if(t_list** begin_list, void* data_ref, int (*cmp)(void*, void*),
-					   void (*free_fct)(void*));
+void ft_list_remove_if(t_list** begin_list, void* data_ref,
+					   int (*cmp)(void*, void*), void (*free_fct)(void*));
 int ft_list_size(t_list* begin_list);
 void ft_list_sort(t_list** begin_list, int (*cmp)(void*, void*));
 
@@ -52,7 +52,9 @@ int printflush(const char* format, ...) {
 	return ret;
 }
 
-void print_title(char* s) { printflush("%s=== %s ===\n%s", BOLDBLUE, s, RESET); }
+void print_title(char* s) {
+	printflush("%s=== %s ===\n%s", BOLDBLUE, s, RESET);
+}
 
 void ft_assert(char* message, bool result) {
 	char* color;
@@ -121,7 +123,8 @@ void test_strchr() {
 		char* ft_res = ft_strchr(test, i);
 		if (!res != !ft_res) {
 			char buf[128] = {};
-			sprintf(buf, "ft_strchr('%s', %d) -> \"%s\" instead of \"%s\"", test, i, ft_res, res);
+			sprintf(buf, "ft_strchr('%s', %d) -> \"%s\" instead of \"%s\"",
+					test, i, ft_res, res);
 			ft_assert(buf, false);
 			return;
 		}
@@ -134,7 +137,8 @@ void test_write() {
 	errno = 0;
 	printflush("return value: %zd | ", write(1, "Wesh la famille !\n", 18));
 	printflush("errno: %d\n", errno);
-	printflush("return value: %zd | ", write(open("/dev/full", O_RDWR), "lol\n", 4));
+	printflush("return value: %zd | ",
+			   write(open("/dev/full", O_RDWR), "lol\n", 4));
 	printflush("errno: %d\n", errno);
 	printflush("return value: %zd | ", write(4162412, "lol\n", 4));
 	printflush("errno: %d\n", errno);
@@ -144,7 +148,8 @@ void test_write() {
 	errno = 0;
 	printflush("return value: %zd | ", ft_write(1, "Wesh la famille !\n", 18));
 	printflush("errno: %d\n", errno);
-	printflush("return value: %zd | ", ft_write(open("/dev/full", O_RDWR), "lol\n", 4));
+	printflush("return value: %zd | ",
+			   ft_write(open("/dev/full", O_RDWR), "lol\n", 4));
 	printflush("errno: %d\n", errno);
 	printflush("return value: %zd | ", ft_write(4162412, "lol\n", 4));
 	printflush("errno: %d\n", errno);
@@ -219,12 +224,14 @@ void test_isspace() {
 }
 
 void test_atoi_base_bad_bases() {
-	char* bad_bases[] = {"aa", "abca", "abc ", "ab\tc", "-0+", "-42", "42+", "", "0", NULL};
+	char* bad_bases[] = {"aa",	"abca", "abc ", "ab\tc", "-0+",
+						 "-42", "42+",	"",		"0",	 NULL};
 	for (size_t i = 0; bad_bases[i]; ++i) {
-		int ret = ft_atoi_base("42", bad_bases[i]);
+		int ret = ft_atoi_base(bad_bases[i], bad_bases[i]);
 		if (ret != 0) {
 			char buf[128] = {};
-			sprintf(buf, "ft_atoi_base(..., \"%s\") returned %d instead of 0", bad_bases[i], ret);
+			sprintf(buf, "ft_atoi_base(..., \"%s\") returned %d instead of 0",
+					bad_bases[i], ret);
 			ft_assert(buf, false);
 			return;
 		}
@@ -258,8 +265,8 @@ void test_atoi_base_decimal() {
 		int ret = ft_atoi_base(tests[i].str, "0123456789");
 		if (ret != tests[i].expected_result) {
 			char buf[128] = {};
-			sprintf(buf, "ft_atoi_base(\"%s\", ...) returned %d instead of %d", tests[i].str, ret,
-					tests[i].expected_result);
+			sprintf(buf, "ft_atoi_base(\"%s\", ...) returned %d instead of %d",
+					tests[i].str, ret, tests[i].expected_result);
 			ft_assert(buf, false);
 			return;
 		}
@@ -268,14 +275,17 @@ void test_atoi_base_decimal() {
 }
 
 void test_atoi_base_other_bases() {
-	t_atoi_base_test tests[] = {
-		{"101010", "01", 42}, {"2A", "0123456789ABCDEF", 42}, {"topo", "pouet", 526}, {NULL, 0}};
+	t_atoi_base_test tests[] = {{"101010", "01", 42},
+								{"2A", "0123456789ABCDEF", 42},
+								{"topo", "pouet", 526},
+								{NULL, 0}};
 	for (size_t i = 0; tests[i].str; ++i) {
 		int ret = ft_atoi_base(tests[i].str, tests[i].base);
 		if (ret != tests[i].expected_result) {
 			char buf[128] = {};
-			sprintf(buf, "ft_atoi_base(\"%s\", \"%s\") returned %d instead of %d", tests[i].str,
-					tests[i].base, ret, tests[i].expected_result);
+			sprintf(buf,
+					"ft_atoi_base(\"%s\", \"%s\") returned %d instead of %d",
+					tests[i].str, tests[i].base, ret, tests[i].expected_result);
 			ft_assert(buf, false);
 			return;
 		}
@@ -314,7 +324,43 @@ void ft_list_clear(t_list* begin_list, void (*free_fct)(void*)) {
 
 int increasing(void* data1, void* data2) { return data1 > data2 ? 1 : -1; }
 int decreasing(void* data1, void* data2) { return data1 < data2 ? 1 : -1; }
-int digit(void* data1, void* data2) { return (size_t)data1 % 10 > (size_t)data2 % 10 ? 1 : -1; }
+int digit(void* data1, void* data2) {
+	return (size_t)data1 % 10 > (size_t)data2 % 10 ? 1 : -1;
+}
+
+int remove_same(void* data1, void* data2) { return data1 - data2; }
+int remove_same_digit(void* data1, void* data2) {
+	return (size_t)data1 % 10 - (size_t)data2 % 10;
+}
+int remove_all(void* data1, void* data2) {
+	(void)data1;
+	(void)data2;
+	return 0;
+}
+
+// void c_list_remove_if(t_list** begin_list, void* data_ref,
+// 					  int (*cmp)(void*, void*), void (*free_fct)(void*)) {
+// 	t_list* prev;
+// 	t_list* curr;
+// 	t_list* next;
+
+// 	if (begin_list == NULL) return;
+// 	prev = NULL;
+// 	curr = *begin_list;
+// 	while (curr) {
+// 		next = curr->next;
+// 		if (cmp(curr->data, data_ref) == 0) {
+// 			if (prev) prev->next = curr->next;
+// 			free_fct(curr->data);
+// 			free(curr);
+// 		} else {
+// 			if (prev == NULL) *begin_list = curr;
+// 			prev = curr;
+// 		}
+// 		curr = next;
+// 	}
+// 	if (prev == NULL) *begin_list = NULL;
+// }
 
 void test_lists_size_t() {
 	// TODO: actual tester
@@ -324,6 +370,7 @@ void test_lists_size_t() {
 	ft_list_push_front(&lst, (void*)1);
 	print_list(lst, false);
 	ft_list_push_front(&lst, (void*)0);
+	print_list(lst, false);
 	ft_list_push_front(&lst, (void*)34);
 	print_list(lst, false);
 	ft_list_push_front(&lst, (void*)5);
@@ -331,8 +378,8 @@ void test_lists_size_t() {
 	ft_list_push_front(&lst, (void*)0);
 	ft_list_push_front(&lst, (void*)2);
 	ft_list_push_front(&lst, (void*)0);
+	ft_list_push_front(&lst, (void*)144);
 	ft_list_push_front(&lst, (void*)3);
-	print_list(lst, false);
 	ft_list_push_front(&lst, (void*)89);
 	ft_list_push_front(&lst, (void*)8);
 	ft_list_push_front(&lst, (void*)13);
@@ -342,15 +389,25 @@ void test_lists_size_t() {
 	ft_list_push_front(&lst, (void*)55);
 	ft_list_push_front(&lst, (void*)0);
 	print_list(lst, false);
-	ft_list_remove_if(&lst, NULL, NULL, NULL);
-	print_list(lst, false);
+	print_title("FT_LIST_REMOVE_IF");
+	for (size_t i = 0; i <= 4; ++i) {
+		ft_list_remove_if(&lst, (void*)i, remove_same, NULL);
+		print_list(lst, false);
+	}
+	print_title("FT_LIST_SORT");
 	ft_list_sort(&lst, increasing);
 	print_list(lst, false);
 	ft_list_sort(&lst, decreasing);
 	print_list(lst, false);
 	ft_list_sort(&lst, digit);
 	print_list(lst, false);
-	ft_list_clear(lst, NULL);
+	print_title("FT_LIST_REMOVE_IF");
+	for (size_t i = 4; i <= 7; ++i) {
+		ft_list_remove_if(&lst, (void*)i, remove_same_digit, NULL);
+		print_list(lst, false);
+	}
+	// ft_list_remove_if(&lst, NULL, remove_all, NULL);
+	// print_list(lst, false);
 }
 
 void test_lists_string() {
@@ -379,5 +436,6 @@ int main(void) {
 	test_atoi_base();
 	test_lists_size_t();
 	test_lists_string();
+	// TODO: test put functions
 	return (1 - perfect);
 }

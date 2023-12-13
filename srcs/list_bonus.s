@@ -45,6 +45,8 @@ ft_list_sort:
     mov rdi, [rdi]
     call ft_list_size
     pop rdi
+    test rax, rax
+    jz .done
     mov rcx, rax
     dec rcx
     .outer_loop:
@@ -77,50 +79,55 @@ ft_list_sort:
                 jmp .inner_loop
         .continue_outer_loop:
             loop .outer_loop
-    ret
-
-
-ft_list_delete_one:
-    test rdi, rdi
-    jz .done
-    mov r11, [rsi + 8]
-    mov [rdi + 8], r11
     .done:
-        call free
+        ret
 
 ft_list_remove_if:
     mov r8, 0
     mov r9, [rdi]
     .loop:
         test r9, r9
-        jz .done
-        mov r10, [r9 + 8]
-        cmp qword [r9], 0
-        je .delete
-
-        mov r11, r8
-        mov r8, r9
-        test r11, r11
-        jnz .continue
-        mov [rdi], r9
-        jmp .continue
-
-        .delete:
-            push rsi
-            push rdi
-            call ft_list_delete_one
-            pop rdi
-            pop rsi
-            jmp .continue
-
-        .continue:
-            mov r9, 10
+        jz .move_begin
+        mov r10, qword [r9 + 8]
+        cmp qword [r9], rsi
+        je .remove
+        jmp .keep
+        .remove:
+            test r8, r8
+            jz .remove_done
+            mov r11, qword [r9 + 8]
+            mov qword [r8 + 8], r11
+            .remove_done:
+                push rdi
+                push rsi
+                push rdx
+                push rcx
+                push r8
+                push r9
+                push r10
+                mov rdi, r9
+                call free
+                pop r10
+                pop r9
+                pop r8
+                pop rcx
+                pop rdx
+                pop rsi
+                pop rdi
+                jmp .continue_loop
+        .keep:
+            test r8, r8
+            jnz .keep_done
+            mov qword [rdi], r9
+            .keep_done:
+                mov r8, r9
+                jmp .continue_loop
+        .continue_loop:
+            mov r9, r10
             jmp .loop
-
-    .done:
+    .move_begin:
         test r8, r8
-        jz .empty
-        ret
-    .empty:
+        jnz .done
         mov qword [rdi], 0
-        ret
+        .done:
+            ret

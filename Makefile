@@ -32,10 +32,10 @@ fclean: clean
 
 re: fclean bonus
 
-run: bonus
-	@echo "Running..."
+test: bonus
+	@echo "Testing..."
 	cc -fsanitize=address,undefined -o $(TEST) main.c -L. -lasm
 	@echo "========================================"
 	@./$(TEST)
 
-rerun: fclean run
+retest: fclean test
