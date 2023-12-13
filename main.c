@@ -34,6 +34,8 @@ typedef struct s_list {
 } t_list;
 
 void ft_list_push_front(t_list** begin_list, void* data);
+void ft_list_remove_if(t_list** begin_list, void* data_ref, int (*cmp)(void*, void*),
+					   void (*free_fct)(void*));
 int ft_list_size(t_list* begin_list);
 void ft_list_sort(t_list** begin_list, int (*cmp)(void*, void*));
 
@@ -292,10 +294,10 @@ void test_atoi_base() {
 ////////////////////////////////// WIP BELOW //////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-void print_list(t_list* lst) {
+void print_list(t_list* lst, bool is_string) {
 	printflush("[%d elems]", ft_list_size(lst));
 	while (lst) {
-		printflush(" %ld", lst->data);
+		printflush(is_string ? " %s" : " %ld", lst->data);
 		lst = lst->next;
 		if (lst) printflush(" ->");
 	}
@@ -314,33 +316,47 @@ int increasing(void* data1, void* data2) { return data1 > data2 ? 1 : -1; }
 int decreasing(void* data1, void* data2) { return data1 < data2 ? 1 : -1; }
 int digit(void* data1, void* data2) { return (size_t)data1 % 10 > (size_t)data2 % 10 ? 1 : -1; }
 
-void test_lists() {
+void test_lists_size_t() {
+	// TODO: actual tester
 	print_title("LISTS");
 	t_list* lst = NULL;
-	print_list(lst);
+	print_list(lst, false);
 	ft_list_push_front(&lst, (void*)0);
-	print_list(lst);
+	print_list(lst, false);
 	ft_list_push_front(&lst, (void*)1);
 	ft_list_push_front(&lst, (void*)34);
-	print_list(lst);
+	print_list(lst, false);
 	ft_list_push_front(&lst, (void*)5);
 	ft_list_push_front(&lst, (void*)2);
 	ft_list_push_front(&lst, (void*)3);
-	print_list(lst);
+	print_list(lst, false);
 	ft_list_push_front(&lst, (void*)89);
 	ft_list_push_front(&lst, (void*)8);
 	ft_list_push_front(&lst, (void*)13);
 	ft_list_push_front(&lst, (void*)21);
 	ft_list_push_front(&lst, (void*)1);
 	ft_list_push_front(&lst, (void*)55);
-	print_list(lst);
+	print_list(lst, false);
 	ft_list_sort(&lst, increasing);
-	print_list(lst);
+	print_list(lst, false);
 	ft_list_sort(&lst, decreasing);
-	print_list(lst);
+	print_list(lst, false);
 	ft_list_sort(&lst, digit);
-	print_list(lst);
+	print_list(lst, false);
 	ft_list_clear(lst, NULL);
+}
+
+void test_lists_string() {
+	print_title("LISTS");
+	t_list* lst = NULL;
+	ft_list_push_front(&lst, ft_strdup("wololo"));
+	ft_list_push_front(&lst, ft_strdup("danil"));
+	ft_list_push_front(&lst, ft_strdup("axel"));
+	ft_list_push_front(&lst, ft_strdup("lol"));
+	print_list(lst, true);
+	ft_list_sort(&lst, (int (*)(void*, void*))strcmp);
+	print_list(lst, true);
+	ft_list_clear(lst, free);
 }
 
 int main(void) {
@@ -354,6 +370,7 @@ int main(void) {
 	test_strdup();
 	test_strlen();
 	test_atoi_base();
-	test_lists();
+	test_lists_size_t();
+	test_lists_string();
 	return (1 - perfect);
 }

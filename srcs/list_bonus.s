@@ -1,4 +1,4 @@
-global ft_list_push_front, ft_list_size, ft_list_sort
+global ft_list_push_front, ft_list_remove_if, ft_list_size, ft_list_sort
 extern malloc
 
 ft_list_new:
@@ -39,11 +39,6 @@ ft_list_size:
     .done:
         ret
 
-ft_cmp:
-    mov rax, rdi
-    sub rax, rsi
-    ret
-
 ft_list_sort:
     mov rdx, rsi
     push rdi
@@ -83,3 +78,5 @@ ft_list_sort:
         .continue_outer_loop:
             loop .outer_loop
     ret
+
+; ft_list_remove_if:
