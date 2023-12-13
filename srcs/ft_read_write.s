@@ -1,3 +1,5 @@
+extern __errno_location
+
 %macro DEFINE_WRAPPER 2
     global %1
     %1:
@@ -15,6 +17,5 @@
             ret
 %endmacro
 
-extern __errno_location
 DEFINE_WRAPPER ft_read, 0
 DEFINE_WRAPPER ft_write, 1
