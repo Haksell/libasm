@@ -14,6 +14,7 @@ extern char		*ft_strcpy(char *dest, const char *src);
 extern int		ft_strcmp(const char *s1, const char *s2);
 ssize_t			ft_write(int fd, const void *buf, size_t count);
 ssize_t			ft_read(int fd, void *buf, size_t count);
+char			*ft_strdup(const char *s);
 
 void test_strlen() {
 	const char		*test_str = "Hello, World!";
@@ -120,6 +121,17 @@ void test_read() {
 	printf("buf: %s | return value: %zd | errno: %d\n", buf, ret, errno);
 }
 
+void test_strdup() {
+	printf("=== TEST STRDUP ===\n");
+	char	str[] = "coucou";
+	char	*res = strdup(str);
+	char	*ft_res = ft_strdup(str);
+	printf("strdup: %s\n", res);
+	printf("ft_strdup: %s\n", ft_res);
+	free(res);
+	free(ft_res);
+}
+
 int	main(void)
 {
 	test_strlen();
@@ -127,5 +139,6 @@ int	main(void)
 	test_strcmp();
 	test_write();
 	test_read();
+	test_strdup();
 	return (0);
 }
