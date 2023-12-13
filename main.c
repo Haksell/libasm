@@ -28,6 +28,13 @@ char* ft_strdup(const char* s);
 extern size_t ft_strlen(const char* s);
 ssize_t ft_write(int fd, const void* buf, size_t count);
 
+typedef struct s_list {
+	void* data;
+	struct s_list* next;
+} t_list;
+
+void ft_list_push_front(t_list** begin_list, void* data);
+
 extern int errno;
 
 bool perfect = true;
@@ -279,6 +286,44 @@ void test_atoi_base() {
 	test_atoi_base_other_bases();
 }
 
+///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// WIP BELOW //////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+void print_list(t_list* lst) {
+	while (lst) {
+		printflush("%ld", lst->data);
+		lst = lst->next;
+		if (lst) printflush(" -> ");
+	}
+	printflush("\n");
+}
+
+void ft_list_clear(t_list* begin_list, void (*free_fct)(void*)) {
+	if (begin_list) {
+		ft_list_clear(begin_list->next, free_fct);
+		if (free_fct) free_fct(begin_list->data);
+		free(begin_list);
+	}
+}
+
+void test_lists() {
+	print_title("LISTS");
+	t_list* lst = NULL;
+	ft_list_push_front(&lst, (void*)0);
+	ft_list_push_front(&lst, (void*)1);
+	ft_list_push_front(&lst, (void*)1);
+	ft_list_push_front(&lst, (void*)2);
+	ft_list_push_front(&lst, (void*)3);
+	ft_list_push_front(&lst, (void*)5);
+	ft_list_push_front(&lst, (void*)8);
+	ft_list_push_front(&lst, (void*)13);
+	ft_list_push_front(&lst, (void*)21);
+	ft_list_push_front(&lst, (void*)34);
+	print_list(lst);
+	ft_list_clear(lst, NULL);
+}
+
 int main(void) {
 	test_write();
 	test_read();
@@ -290,5 +335,6 @@ int main(void) {
 	test_strdup();
 	test_strlen();
 	test_atoi_base();
+	test_lists();
 	return (1 - perfect);
 }
