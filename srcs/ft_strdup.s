@@ -1,8 +1,6 @@
 global ft_strdup
 extern ft_strcpy, ft_strlen, malloc
 
-section .text
-
 ft_strdup:
     call ft_strlen
     inc rax

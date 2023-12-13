@@ -1,3 +1,5 @@
+# TODO: compile bonus separately
+
 NAME := libasm.a
 TEST := test
 
@@ -9,6 +11,8 @@ SRCS := $(addprefix $(PATH_SRCS)/, $(addsuffix .s, $(FILENAMES)))
 OBJS := $(addprefix $(PATH_OBJS)/, $(addsuffix .o, $(FILENAMES)))
 
 all: $(NAME)
+
+bonus: $(NAME)
 
 $(NAME): $(OBJS)
 	@echo "Compiling..."
@@ -26,9 +30,9 @@ clean:
 fclean: clean
 	rm -f $(NAME) $(TEST)
 
-re: fclean all
+re: fclean bonus
 
-run: all
+run: bonus
 	@echo "Running..."
 	cc -fsanitize=address,undefined -o $(TEST) main.c -L. -lasm
 	@echo "========================================"
