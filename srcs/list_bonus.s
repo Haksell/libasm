@@ -45,7 +45,7 @@ ft_cmp:
     ret
 
 ft_list_sort:
-    mov r8, rsi
+    mov rdx, rsi
     push rdi
     mov rdi, [rdi]
     call ft_list_size
@@ -55,43 +55,31 @@ ft_list_sort:
     .outer_loop:
         mov r9, [rdi]
         .inner_loop:
-            mov rdx, [r9 + 8]
-            test rdx, rdx
+            mov r8, [r9 + 8]
+            test r8, r8
             jz .continue_outer_loop
-
-            push rcx
-            push rdx
-            push rsi
-            push rdi
+            push r8
             push r9
-            push r10
-            push r11
-            
+            push rcx
+            push rdi
+            push rdx
             mov rdi, [r9]
-            mov rsi, [rdx]
-            call r8
-
-            pop r11
-            pop r10
-            pop r9
-            pop rdi
-            pop rsi
+            mov rsi, [r8]
+            call rdx
             pop rdx
+            pop rdi
             pop rcx
-
+            pop r9
+            pop r8
             cmp eax, 0
             jle .continue_inner_loop
-
             mov r10, [r9]
-            mov r11, [rdx]
-            mov [rdx], r10
+            mov r11, [r8]
+            mov [r8], r10
             mov [r9], r11
-
             .continue_inner_loop:
-                mov r9, rdx
+                mov r9, r8
                 jmp .inner_loop
         .continue_outer_loop:
             loop .outer_loop
-
-    .done:
-        ret
+    ret
