@@ -51,36 +51,23 @@ ft_list_sort:
     call ft_list_size
     pop rdi
     mov rcx, rax
-    .outer_loop: ; TODO: loop .outer_loop
-        test rcx, rcx
-        jz .done
+    .outer_loop:
         mov r9, [rdi] ; node
         .inner_loop:
             mov rdx, [r9 + 8] ; node->next
             test rdx, rdx
             jz .continue_outer_loop
 
-            push rcx
-            push rdx
+
             push rdi
             push rsi
-            push r8
-            push r9
-            push r10
-            push r11
             
             mov rdi, [r9] ; node->data
             mov rsi, [rdx] ; node->next->data
             call ft_cmp
-            
-            pop r11
-            pop r10
-            pop r9
-            pop r8
+
             pop rsi
             pop rdi
-            pop rdx
-            pop rcx
             
             cmp rax, 0
             jle .continue_inner_loop
@@ -94,8 +81,7 @@ ft_list_sort:
                 mov r9, rdx
                 jmp .inner_loop
         .continue_outer_loop:
-            dec rcx
-            jmp .outer_loop
+            loop .outer_loop
 
     .done:
         ret
