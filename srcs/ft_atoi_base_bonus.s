@@ -70,7 +70,7 @@ ft_atoi_base:
 
     .get_sign:
         mov rcx, 1
-        .loop:
+        .get_sign_loop:
             cmp byte [rdi], '-'
             je .negate
             cmp byte [rdi], '+'
@@ -80,13 +80,25 @@ ft_atoi_base:
                 neg rcx
             .continue:
                 inc rdi
-                jmp .loop
+                jmp .get_sign_loop
 
     .calculate:
-        call ft_strlen
+        mov rax, 0
+        .calculate_loop:
+            movzx rdx, byte [rdi]
+            cmp dl, '0'
+            jl .done
+            cmp dl, '9'
+            jg .done
+            imul rax, 10
+            add rax, rdx
+            sub rax, '0'
+            inc rdi
+            jmp .calculate_loop
+
+    .done:
         imul rax, rcx
         ret
-
 
     .invalid_base:
         ret

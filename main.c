@@ -223,7 +223,7 @@ void test_atoi_base() {
 	printflush("%d ", ft_atoi_base("423", "01"));
 	printflush("%d ", ft_atoi_base("  -4233", "0123456789"));
 	printflush("%d ", ft_atoi_base("\t+--42333", "0123456789ABCDEF"));
-	printflush("%d ", ft_atoi_base("\t  --++-12354", "0123456789ABCDEF"));
+	printflush("%d ", ft_atoi_base("\t  --++-12345lol42", "0123456789ABCDEF"));
 	printflush("\n");
 }
 
