@@ -310,7 +310,9 @@ void ft_list_clear(t_list* begin_list, void (*free_fct)(void*)) {
 	}
 }
 
-int cmp(void* data1, void* data2) { return data1 < data2 ? -1 : 1; }
+int increasing(void* data1, void* data2) { return data1 > data2 ? 1 : -1; }
+int decreasing(void* data1, void* data2) { return data1 < data2 ? 1 : -1; }
+int digit(void* data1, void* data2) { return (size_t)data1 % 10 > (size_t)data2 % 10 ? 1 : -1; }
 
 void test_lists() {
 	print_title("LISTS");
@@ -325,12 +327,18 @@ void test_lists() {
 	ft_list_push_front(&lst, (void*)2);
 	ft_list_push_front(&lst, (void*)3);
 	print_list(lst);
+	ft_list_push_front(&lst, (void*)89);
 	ft_list_push_front(&lst, (void*)8);
 	ft_list_push_front(&lst, (void*)13);
 	ft_list_push_front(&lst, (void*)21);
 	ft_list_push_front(&lst, (void*)1);
+	ft_list_push_front(&lst, (void*)55);
 	print_list(lst);
-	ft_list_sort(&lst, cmp);
+	ft_list_sort(&lst, increasing);
+	print_list(lst);
+	ft_list_sort(&lst, decreasing);
+	print_list(lst);
+	ft_list_sort(&lst, digit);
 	print_list(lst);
 	ft_list_clear(lst, NULL);
 }

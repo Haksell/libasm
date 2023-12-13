@@ -45,31 +45,41 @@ ft_cmp:
     ret
 
 ft_list_sort:
-    mov r8, rsi ; cmp
+    mov r8, rsi
     push rdi
     mov rdi, [rdi]
     call ft_list_size
     pop rdi
     mov rcx, rax
+    dec rcx
     .outer_loop:
-        mov r9, [rdi] ; node
+        mov r9, [rdi]
         .inner_loop:
-            mov rdx, [r9 + 8] ; node->next
+            mov rdx, [r9 + 8]
             test rdx, rdx
             jz .continue_outer_loop
 
-
-            push rdi
+            push rcx
+            push rdx
             push rsi
+            push rdi
+            push r9
+            push r10
+            push r11
             
-            mov rdi, [r9] ; node->data
-            mov rsi, [rdx] ; node->next->data
-            call ft_cmp
+            mov rdi, [r9]
+            mov rsi, [rdx]
+            call r8
 
-            pop rsi
+            pop r11
+            pop r10
+            pop r9
             pop rdi
-            
-            cmp rax, 0
+            pop rsi
+            pop rdx
+            pop rcx
+
+            cmp eax, 0
             jle .continue_inner_loop
 
             mov r10, [r9]
