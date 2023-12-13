@@ -41,9 +41,9 @@ int printflush(const char* format, ...) {
 	return ret;
 }
 
-void display_title(char* s) { printflush("%s=== %s ===\n%s", BOLDBLUE, s, RESET); }
+void print_title(char* s) { printflush("%s=== %s ===\n%s", BOLDBLUE, s, RESET); }
 
-void ft_assert(char* test_name, bool result) {
+void ft_assert(char* message, bool result) {
 	char* color;
 	char* verdict;
 
@@ -55,7 +55,7 @@ void ft_assert(char* test_name, bool result) {
 		verdict = "KO";
 		perfect = false;
 	}
-	printflush("%s[%s] %s\n%s", color, verdict, test_name, RESET);
+	printflush("%s[%s] %s\n%s", color, verdict, message, RESET);
 }
 
 void test_strlen() {
@@ -119,7 +119,7 @@ void test_strchr() {
 }
 
 void test_write() {
-	display_title("WRITE");
+	print_title("WRITE");
 	errno = 0;
 	printflush("return value: %zd | ", write(1, "Wesh la famille !\n", 18));
 	printflush("errno: %d\n", errno);
@@ -129,7 +129,7 @@ void test_write() {
 	printflush("errno: %d\n", errno);
 	printflush("return value: %zd | ", write(1, NULL, 18));
 	printflush("errno: %d\n", errno);
-	display_title("FT_WRITE");
+	print_title("FT_WRITE");
 	errno = 0;
 	printflush("return value: %zd | ", ft_write(1, "Wesh la famille !\n", 18));
 	printflush("errno: %d\n", errno);
@@ -145,7 +145,7 @@ void test_read() {
 	char buf[32];
 	ssize_t ret = 0;
 
-	display_title("READ");
+	print_title("READ");
 	errno = 0;
 	ret = 0;
 	bzero(buf, sizeof(buf));
@@ -161,7 +161,7 @@ void test_read() {
 	ret = read(open("srcs", O_RDONLY), buf, sizeof(buf) - 1);
 	printflush("buf: %s | return value: %zd | errno: %d\n", buf, ret, errno);
 
-	display_title("FT_READ");
+	print_title("FT_READ");
 	errno = 0;
 	ret = 0;
 	bzero(buf, sizeof(buf));
@@ -207,20 +207,31 @@ void test_isspace() {
 	ft_assert("ft_isspace", true);
 }
 
+void test_atoi_base_bad_base() {
+	char* bad_bases[] = {"aa", "abca", "abc ", "ab\tc", "-0+", "-42", "42+", "", "0", NULL};
+	for (size_t i = 0; bad_bases[i]; ++i) {
+		int ret = ft_atoi_base("42", bad_bases[i]);
+		printflush("%s\n", bad_bases[i]);
+		if (ret != 0) {
+			char buf[128] = {};
+			sprintf(buf, "ft_atoi_base(..., \"%s\") returned %d instead of 0", bad_bases[i], ret);
+			ft_assert(buf, false);
+			return;
+		}
+	}
+	ft_assert("ft_atoi bad bases", true);
+}
+
 void test_atoi_base() {
-	printflush("=== TEST ATOI BASE ===\n");
-	printflush("%d ", ft_atoi_base("42", "aa"));
-	printflush("%d ", ft_atoi_base("42", "abca"));
-	printflush("%d ", ft_atoi_base("42", "abc "));
-	printflush("%d ", ft_atoi_base("42", "ab\tc"));
-	printflush("%d ", ft_atoi_base("42", "ab\tc"));
-	printflush("%d ", ft_atoi_base("42", "-0+"));
-	printflush("%d ", ft_atoi_base("42", "-42"));
-	printflush("%d ", ft_atoi_base("42", "42+"));
-	printflush("%d ", ft_atoi_base("42", ""));
-	printflush("%d ", ft_atoi_base("42", "0"));
+	print_title("FT_ATOI_BASE");
+	test_atoi_base_bad_base();
 	printflush("| ");
-	printflush("%d ", ft_atoi_base("423", "01"));
+	printflush("%d ", ft_atoi_base("111", "0123456789"));
+	printflush("%d ", ft_atoi_base("  -4233", "0123456789"));
+	printflush("%d ", ft_atoi_base("\t+--42333", "0123456789"));
+	printflush("%d ", ft_atoi_base("\t  --++-12345lol42", "0123456789"));
+	printflush("| ");
+	printflush("%d ", ft_atoi_base("111", "012"));
 	printflush("%d ", ft_atoi_base("  -4233", "0123456789"));
 	printflush("%d ", ft_atoi_base("\t+--42333", "0123456789ABCDEF"));
 	printflush("%d ", ft_atoi_base("\t  --++-12345lol42", "0123456789ABCDEF"));
@@ -230,13 +241,13 @@ void test_atoi_base() {
 int main(void) {
 	test_write();
 	test_read();
-	display_title("TESTER");
-	test_strlen();
-	test_strcpy();
-	test_strcmp();
-	test_strchr();
-	test_strdup();
+	print_title("STRINGS");
 	test_isspace();
+	test_strchr();
+	test_strcmp();
+	test_strcpy();
+	test_strdup();
+	test_strlen();
 	test_atoi_base();
 	return (1 - perfect);
 }

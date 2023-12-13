@@ -52,11 +52,11 @@ ft_atoi_base:
     push rdi
     mov rdi, rsi
     call is_valid_base
+    mov r8, rdi
     pop rdi
     pop rsi
     test rax, rax
     jz .invalid_base
-
     .skip_whitespace:
         movzx rdx, byte [rdi]
         push rdi
@@ -67,7 +67,6 @@ ft_atoi_base:
         jz .get_sign
         inc rdi
         jmp .skip_whitespace
-
     .get_sign:
         mov rcx, 1
         .get_sign_loop:
@@ -81,22 +80,28 @@ ft_atoi_base:
             .continue:
                 inc rdi
                 jmp .get_sign_loop
-
     .calculate:
-        mov rax, 0
+        mov r9, 0
         .calculate_loop:
             movzx rdx, byte [rdi]
-            cmp dl, '0'
-            jl .done
-            cmp dl, '9'
-            jg .done
-            imul rax, 10
-            add rax, rdx
-            sub rax, '0'
+            test rdx, rdx
+            jz .done
+            push rdi
+            push rsi
+            mov rdi, rsi
+            mov rsi, rdx
+            call ft_strchr
+            pop rsi
+            pop rdi
+            test rax, rax
+            jz .done
+            sub rax, rsi
+            imul r9, r8
+            add r9, rax
             inc rdi
             jmp .calculate_loop
-
     .done:
+        mov rax, r9
         imul rax, rcx
         ret
 
