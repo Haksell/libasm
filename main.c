@@ -35,6 +35,7 @@ typedef struct s_list {
 
 void ft_list_push_front(t_list** begin_list, void* data);
 int ft_list_size(t_list* begin_list);
+void ft_list_sort(t_list** begin_list, int (*cmp)(void*, void*));
 
 extern int errno;
 
@@ -309,6 +310,8 @@ void ft_list_clear(t_list* begin_list, void (*free_fct)(void*)) {
 	}
 }
 
+int cmp(void* data1, void* data2) { return data1 < data2 ? -1 : 1; }
+
 void test_lists() {
 	print_title("LISTS");
 	t_list* lst = NULL;
@@ -316,16 +319,18 @@ void test_lists() {
 	ft_list_push_front(&lst, (void*)0);
 	print_list(lst);
 	ft_list_push_front(&lst, (void*)1);
-	ft_list_push_front(&lst, (void*)1);
+	ft_list_push_front(&lst, (void*)34);
 	print_list(lst);
+	ft_list_push_front(&lst, (void*)5);
 	ft_list_push_front(&lst, (void*)2);
 	ft_list_push_front(&lst, (void*)3);
-	ft_list_push_front(&lst, (void*)5);
 	print_list(lst);
 	ft_list_push_front(&lst, (void*)8);
 	ft_list_push_front(&lst, (void*)13);
 	ft_list_push_front(&lst, (void*)21);
-	ft_list_push_front(&lst, (void*)34);
+	ft_list_push_front(&lst, (void*)1);
+	print_list(lst);
+	ft_list_sort(&lst, cmp);
 	print_list(lst);
 	ft_list_clear(lst, NULL);
 }
