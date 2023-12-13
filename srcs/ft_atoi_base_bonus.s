@@ -1,8 +1,6 @@
 global ft_atoi_base
 extern ft_isspace, ft_strchr, ft_strlen
 
-extern strchr ; TODO: remove
-
 section .text
 
 is_valid_base_char:
@@ -21,33 +19,28 @@ is_valid_base_char:
         ret
 
 is_valid_base:
-    push rdi
-    call ft_strlen
-    pop rdi
-    cmp rax, 2
-    jl .no
+    mov rdx, rdi
     .loop:
         mov sil, byte [rdi]
         test sil, sil
-        jz .yes
-
+        jz .done
         push rdi
         mov dil, sil
         call is_valid_base_char
         pop rdi
         test rax, rax
         jz .no
-
         inc rdi
-
         push rdi
-        call strchr
+        call ft_strchr
         pop rdi
         test rax, rax
         jnz .no
-
         jmp .loop
-    .yes:
+    .done:
+        sub rdi, rdx
+        cmp rdi, 2
+        jl .no
         mov rax, 1
         ret
     .no:
