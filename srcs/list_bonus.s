@@ -1,5 +1,5 @@
 global ft_list_push_front, ft_list_remove_if, ft_list_size, ft_list_sort
-extern malloc
+extern free, malloc
 
 ft_list_new:
     push rdi
@@ -79,4 +79,48 @@ ft_list_sort:
             loop .outer_loop
     ret
 
-; ft_list_remove_if:
+
+ft_list_delete_one:
+    test rdi, rdi
+    jz .done
+    mov r11, [rsi + 8]
+    mov [rdi + 8], r11
+    .done:
+        call free
+
+ft_list_remove_if:
+    mov r8, 0
+    mov r9, [rdi]
+    .loop:
+        test r9, r9
+        jz .done
+        mov r10, [r9 + 8]
+        cmp qword [r9], 0
+        je .delete
+
+        mov r11, r8
+        mov r8, r9
+        test r11, r11
+        jnz .continue
+        mov [rdi], r9
+        jmp .continue
+
+        .delete:
+            push rsi
+            push rdi
+            call ft_list_delete_one
+            pop rdi
+            pop rsi
+            jmp .continue
+
+        .continue:
+            mov r9, 10
+            jmp .loop
+
+    .done:
+        test r8, r8
+        jz .empty
+        ret
+    .empty:
+        mov qword [rdi], 0
+        ret
