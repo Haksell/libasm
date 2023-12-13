@@ -26,26 +26,23 @@ is_valid_base:
     pop rdi
     cmp rax, 2
     jl .no
-    mov rsi, rdi
-    mov rdx, rdi
     .loop:
-        mov dil, byte [rsi]
-        test dil, dil
+        mov sil, byte [rdi]
+        test sil, sil
         jz .yes
+
+        push rdi
+        mov dil, sil
         call is_valid_base_char
+        pop rdi
         test rax, rax
         jz .no
 
-        inc rsi
-        cmp byte [rsi], 0
-        jz .yes
+        inc rdi
 
-        push rsi
-        mov rdx, rdi
-        mov rdi, rsi
-        mov rsi, rdx
+        push rdi
         call strchr
-        pop rsi
+        pop rdi
         test rax, rax
         jnz .no
 
