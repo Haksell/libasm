@@ -1,4 +1,4 @@
-global ft_list_push_front
+global ft_list_push_front, ft_list_size
 extern malloc
 
 ft_list_new:
@@ -21,8 +21,20 @@ ft_list_push_front:
     pop rsi
     pop rdi
     test rax, rax
+    jz .done
     mov rdx, [rdi]
     mov qword [rax + 8], rdx
     mov qword [rdi], rax
+    .done:
+        ret
+
+ft_list_size:
+    xor rax, rax
+    .loop:
+        cmp qword rdi, 0
+        jz .done
+        mov rdi, qword [rdi + 8]
+        inc rax
+        jmp .loop
     .done:
         ret

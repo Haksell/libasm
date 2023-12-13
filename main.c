@@ -34,6 +34,7 @@ typedef struct s_list {
 } t_list;
 
 void ft_list_push_front(t_list** begin_list, void* data);
+int ft_list_size(t_list* begin_list);
 
 extern int errno;
 
@@ -291,10 +292,11 @@ void test_atoi_base() {
 ///////////////////////////////////////////////////////////////////////////////
 
 void print_list(t_list* lst) {
+	printflush("[%d elems]", ft_list_size(lst));
 	while (lst) {
-		printflush("%ld", lst->data);
+		printflush(" %ld", lst->data);
 		lst = lst->next;
-		if (lst) printflush(" -> ");
+		if (lst) printflush(" ->");
 	}
 	printflush("\n");
 }
@@ -310,12 +312,16 @@ void ft_list_clear(t_list* begin_list, void (*free_fct)(void*)) {
 void test_lists() {
 	print_title("LISTS");
 	t_list* lst = NULL;
+	print_list(lst);
 	ft_list_push_front(&lst, (void*)0);
+	print_list(lst);
 	ft_list_push_front(&lst, (void*)1);
 	ft_list_push_front(&lst, (void*)1);
+	print_list(lst);
 	ft_list_push_front(&lst, (void*)2);
 	ft_list_push_front(&lst, (void*)3);
 	ft_list_push_front(&lst, (void*)5);
+	print_list(lst);
 	ft_list_push_front(&lst, (void*)8);
 	ft_list_push_front(&lst, (void*)13);
 	ft_list_push_front(&lst, (void*)21);
