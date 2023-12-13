@@ -209,10 +209,6 @@ void test_isspace() {
 
 void test_atoi_base() {
 	printflush("=== TEST ATOI BASE ===\n");
-	printflush("%d ", ft_atoi_base("42", "01"));
-	printflush("%d ", ft_atoi_base("42", "0123456789"));
-	printflush("%d ", ft_atoi_base("42", "0123456789ABCDEF"));
-	printflush("| ");
 	printflush("%d ", ft_atoi_base("42", "aa"));
 	printflush("%d ", ft_atoi_base("42", "abca"));
 	printflush("%d ", ft_atoi_base("42", "abc "));
@@ -223,6 +219,11 @@ void test_atoi_base() {
 	printflush("%d ", ft_atoi_base("42", "42+"));
 	printflush("%d ", ft_atoi_base("42", ""));
 	printflush("%d ", ft_atoi_base("42", "0"));
+	printflush("| ");
+	printflush("%d ", ft_atoi_base("423", "01"));
+	printflush("%d ", ft_atoi_base("  -4233", "0123456789"));
+	printflush("%d ", ft_atoi_base("\t42333", "0123456789ABCDEF"));
+	printflush("%d ", ft_atoi_base("\t  --++-12354", "0123456789ABCDEF"));
 	printflush("\n");
 }
 

@@ -55,8 +55,22 @@ ft_atoi_base:
     pop rdi
     pop rsi
     test rax, rax
-    jnz .valid
-    ret
-    .valid:
-        mov rax, 42
+    jz .invalid_base
+
+    .skip_whitespace:
+        movzx rdx, byte [rdi]
+        push rdi
+        mov rdi, rdx
+        call ft_isspace
+        pop rdi
+        test rax, rax
+        jz .calculate
+        inc rdi
+        jmp .skip_whitespace
+
+    .calculate:
+        call ft_strlen
+        ret
+
+    .invalid_base:
         ret
