@@ -105,20 +105,12 @@ void test_strchr() {
 	char* test = "abcde";
 	char* tests = "aceg";
 
-	for (size_t i = 0; i <= ft_strlen(tests); ++i) {
-		char* res = strchr(test, tests[i]);
-		char* ft_res = ft_strchr(test, tests[i]);
+	for (int i = -42; i <= 500; ++i) {
+		char* res = strchr(test, i);
+		char* ft_res = ft_strchr(test, i);
 		if (!res != !ft_res) {
-			char arg_display[3] = {};
-			if (tests[i]) {
-				arg_display[0] = tests[i];
-			} else {
-				arg_display[0] = '\\';
-				arg_display[1] = '0';
-			}
 			char buf[128] = {};
-			sprintf(buf, "ft_strchr('%s') -> \"%s\" instead of \"%s\"", arg_display,
-					ft_res, res);
+			sprintf(buf, "ft_strchr('%s', %d) -> \"%s\" instead of \"%s\"", test, i, ft_res, res);
 			ft_assert(buf, false);
 			return;
 		}
