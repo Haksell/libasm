@@ -73,10 +73,10 @@ ft_list_sort:
             pop r8
             cmp eax, 0
             jle .continue_inner_loop
-            mov r10, [r9]
-            mov r11, [r8]
-            mov [r8], r10
-            mov [r9], r11
+            mov r10, [r8]
+            mov r11, [r9]
+            mov [r8], r11
+            mov [r9], r10
             .continue_inner_loop:
                 mov r9, r8
                 jmp .inner_loop
