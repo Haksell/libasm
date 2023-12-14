@@ -1,5 +1,3 @@
-# TODO: compile bonus separately
-
 NAME := libasm.a
 TEST := test
 
@@ -7,6 +5,14 @@ PATH_SRCS := srcs
 PATH_OBJS := objs
 
 FILENAMES := $(notdir $(basename $(wildcard $(PATH_SRCS)/*.s)))
+
+ifeq ($(MAKECMDGOALS),all)
+FILENAMES := $(filter-out %_bonus, $(FILENAMES))
+endif
+ifeq ($(MAKECMDGOALS),)
+FILENAMES := $(filter-out %_bonus, $(FILENAMES))
+endif
+
 SRCS := $(addprefix $(PATH_SRCS)/, $(addsuffix .s, $(FILENAMES)))
 OBJS := $(addprefix $(PATH_OBJS)/, $(addsuffix .o, $(FILENAMES)))
 
@@ -30,7 +36,7 @@ clean:
 fclean: clean
 	rm -f $(NAME) $(TEST)
 
-re: fclean bonus
+re: fclean all
 
 test: bonus
 	@echo "Testing..."
