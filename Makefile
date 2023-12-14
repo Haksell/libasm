@@ -11,6 +11,9 @@ FILENAMES_NO_BONUS := $(filter-out %_bonus, $(FILENAMES))
 ifeq ($(MAKECMDGOALS),all)
 	FILENAMES := $(FILENAMES_NO_BONUS)
 endif
+ifeq ($(MAKECMDGOALS),re)
+	FILENAMES := $(FILENAMES_NO_BONUS)
+endif
 ifeq ($(MAKECMDGOALS),)
 	FILENAMES := $(FILENAMES_NO_BONUS)
 endif
@@ -33,7 +36,7 @@ $(OBJS): $(PATH_OBJS)/%.o: $(PATH_SRCS)/%.s $(HEADER) | $(PATH_OBJS)
 	nasm -f elf64 $< -o $@
 
 clean:
-	rm -rf $(PATH_OBJS)
+	rm -rf $(PATH_OBJS) a.out
 
 fclean: clean
 	rm -f $(NAME) $(TEST)

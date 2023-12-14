@@ -11,7 +11,7 @@ extern __errno_location
         .fail:
             mov rdx, rax
             neg rdx
-            call __errno_location
+            call __errno_location wrt ..plt
             mov [rax], rdx
             mov rax, -1
             ret

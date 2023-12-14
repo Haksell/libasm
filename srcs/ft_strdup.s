@@ -6,7 +6,7 @@ ft_strdup:
     inc rax
     push rdi
     mov rdi, rax
-    call malloc
+    call malloc wrt ..plt
     pop rdi
     test rax, rax
     jz .done

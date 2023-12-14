@@ -4,7 +4,7 @@ extern free, malloc
 ft_list_new:
     push rdi
     mov rdi, 16
-    call malloc
+    call malloc wrt ..plt
     pop rdi
     test rax, rax
     jz .done
@@ -132,7 +132,7 @@ ft_list_remove_if:
                 .free_node:
                     FT_LIST_REMOVE_IF_PUSH_ALL
                     mov rdi, r9
-                    call free
+                    call free wrt ..plt
                     FT_LIST_REMOVE_IF_POP_ALL
                     jmp .continue_loop
         .keep:
