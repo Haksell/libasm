@@ -124,6 +124,10 @@ ft_list_remove_if:
             mov qword [r8 + 8], r11
             .remove_done:
                 FT_LIST_REMOVE_IF_PUSH_ALL
+                mov rdi, [r9]
+                call rcx
+                FT_LIST_REMOVE_IF_POP_ALL
+                FT_LIST_REMOVE_IF_PUSH_ALL
                 mov rdi, r9
                 call free
                 FT_LIST_REMOVE_IF_POP_ALL

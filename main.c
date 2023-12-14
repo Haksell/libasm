@@ -338,6 +338,8 @@ int remove_all(void* data1, void* data2) {
 	return 0;
 }
 
+void dont_free(void* data) { (void)data; }
+
 // void c_list_remove_if(t_list** begin_list, void* data_ref,
 // 					  int (*cmp)(void*, void*), void (*free_fct)(void*)) {
 // 	t_list* prev;
@@ -390,7 +392,7 @@ void test_lists_size_t() {
 	print_list(lst, false);
 	print_title("FT_LIST_REMOVE_IF");
 	for (size_t i = 0; i <= 4; ++i) {
-		ft_list_remove_if(&lst, (void*)i, remove_same, NULL);
+		ft_list_remove_if(&lst, (void*)i, remove_same, dont_free);
 		print_list(lst, false);
 	}
 	print_title("FT_LIST_SORT");
@@ -402,10 +404,10 @@ void test_lists_size_t() {
 	print_list(lst, false);
 	print_title("FT_LIST_REMOVE_IF");
 	for (size_t i = 4; i <= 7; ++i) {
-		ft_list_remove_if(&lst, (void*)i, remove_same_digit, NULL);
+		ft_list_remove_if(&lst, (void*)i, remove_same_digit, dont_free);
 		print_list(lst, false);
 	}
-	ft_list_remove_if(&lst, NULL, remove_all, NULL);
+	ft_list_remove_if(&lst, NULL, remove_all, dont_free);
 	print_list(lst, false);
 }
 
@@ -419,7 +421,9 @@ void test_lists_string() {
 	print_list(lst, true);
 	ft_list_sort(&lst, (int (*)(void*, void*))strcmp);
 	print_list(lst, true);
-	ft_list_remove_if(&lst, NULL, remove_all, NULL);
+	ft_list_remove_if(&lst, "danil", (int (*)(void*, void*))strcmp, free);
+	print_list(lst, true);
+	ft_list_remove_if(&lst, NULL, remove_all, free);
 	print_list(lst, true);
 }
 
