@@ -1,16 +1,18 @@
 NAME := libasm.a
+HEADER := libasm.h
 TEST := test
 
 PATH_SRCS := srcs
 PATH_OBJS := objs
 
 FILENAMES := $(notdir $(basename $(wildcard $(PATH_SRCS)/*.s)))
+FILENAMES_NO_BONUS := $(filter-out %_bonus, $(FILENAMES))
 
 ifeq ($(MAKECMDGOALS),all)
-FILENAMES := $(filter-out %_bonus, $(FILENAMES))
+	FILENAMES := $(FILENAMES_NO_BONUS)
 endif
 ifeq ($(MAKECMDGOALS),)
-FILENAMES := $(filter-out %_bonus, $(FILENAMES))
+	FILENAMES := $(FILENAMES_NO_BONUS)
 endif
 
 SRCS := $(addprefix $(PATH_SRCS)/, $(addsuffix .s, $(FILENAMES)))
@@ -27,7 +29,7 @@ $(NAME): $(OBJS)
 $(PATH_OBJS):
 	@mkdir $(PATH_OBJS)
 
-$(OBJS): $(PATH_OBJS)/%.o: $(PATH_SRCS)/%.s | $(PATH_OBJS)
+$(OBJS): $(PATH_OBJS)/%.o: $(PATH_SRCS)/%.s $(HEADER) | $(PATH_OBJS)
 	nasm -f elf64 $< -o $@
 
 clean:
