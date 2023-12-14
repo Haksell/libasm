@@ -363,8 +363,7 @@ int remove_all(void* data1, void* data2) {
 // }
 
 void test_lists_size_t() {
-	// TODO: actual tester
-	print_title("LISTS");
+	print_title("LISTS OF SIZE_T");
 	t_list* lst = NULL;
 	print_list(lst, false);
 	ft_list_push_front(&lst, (void*)1);
@@ -406,12 +405,12 @@ void test_lists_size_t() {
 		ft_list_remove_if(&lst, (void*)i, remove_same_digit, NULL);
 		print_list(lst, false);
 	}
-	// ft_list_remove_if(&lst, NULL, remove_all, NULL);
-	// print_list(lst, false);
+	ft_list_remove_if(&lst, NULL, remove_all, NULL);
+	print_list(lst, false);
 }
 
 void test_lists_string() {
-	print_title("LISTS");
+	print_title("LISTS OF STRINGS");
 	t_list* lst = NULL;
 	ft_list_push_front(&lst, ft_strdup("wololo"));
 	ft_list_push_front(&lst, ft_strdup("danil"));
@@ -420,7 +419,8 @@ void test_lists_string() {
 	print_list(lst, true);
 	ft_list_sort(&lst, (int (*)(void*, void*))strcmp);
 	print_list(lst, true);
-	ft_list_clear(lst, free);
+	ft_list_remove_if(&lst, NULL, remove_all, NULL);
+	print_list(lst, true);
 }
 
 int main(void) {

@@ -109,8 +109,13 @@ ft_list_remove_if:
         test r9, r9
         jz .move_begin
         mov r10, qword [r9 + 8]
-        cmp qword [r9], rsi
-        je .remove
+        FT_LIST_REMOVE_IF_PUSH_ALL
+        mov rdi, [r9]
+        mov rsi, rsi
+        call rdx
+        FT_LIST_REMOVE_IF_POP_ALL
+        test rax, rax
+        jz .remove
         jmp .keep
         .remove:
             test r8, r8
