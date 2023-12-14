@@ -82,6 +82,26 @@ ft_list_sort:
     .done:
         ret
 
+%macro FT_LIST_REMOVE_IF_PUSH_ALL 0
+    push rdi
+    push rsi
+    push rdx
+    push rcx
+    push r8
+    push r9
+    push r10
+%endmacro
+
+%macro FT_LIST_REMOVE_IF_POP_ALL 0
+    pop r10
+    pop r9
+    pop r8
+    pop rcx
+    pop rdx
+    pop rsi
+    pop rdi
+%endmacro
+
 ft_list_remove_if:
     mov r8, 0
     mov r9, [rdi]
@@ -98,22 +118,10 @@ ft_list_remove_if:
             mov r11, qword [r9 + 8]
             mov qword [r8 + 8], r11
             .remove_done:
-                push rdi
-                push rsi
-                push rdx
-                push rcx
-                push r8
-                push r9
-                push r10
+                FT_LIST_REMOVE_IF_PUSH_ALL
                 mov rdi, r9
                 call free
-                pop r10
-                pop r9
-                pop r8
-                pop rcx
-                pop rdx
-                pop rsi
-                pop rdi
+                FT_LIST_REMOVE_IF_POP_ALL
                 jmp .continue_loop
         .keep:
             test r8, r8
