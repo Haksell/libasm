@@ -260,7 +260,7 @@ void test_atoi_base_decimal() {
 								{"-123456789", "0123456789", -123456789},
 								{"2147483647", "0123456789", 2147483647},
 								{"2147483648", "0123456789", -2147483648},
-								{NULL, 0}};
+								{}};
 	for (size_t i = 0; tests[i].str; ++i) {
 		int ret = ft_atoi_base(tests[i].str, "0123456789");
 		if (ret != tests[i].expected_result) {
@@ -307,7 +307,7 @@ void test_atoi_base() {
 void print_list(t_list* lst, bool is_string) {
 	printflush("[%d elems]", ft_list_size(lst));
 	while (lst) {
-		printflush(is_string ? " %s" : " %ld", lst->data);
+		printflush(is_string ? " %s" : " %lu", lst->data);
 		lst = lst->next;
 		if (lst) printflush(" ->");
 	}
