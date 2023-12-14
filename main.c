@@ -20,6 +20,10 @@
 
 int ft_atoi_base(char* str, char* base);
 int ft_isspace(int c);
+void ft_putchar(char c);
+void ft_putendl(char* s);
+void ft_putstr(char* s);
+void ft_putunbr(size_t n);
 ssize_t ft_read(int fd, void* buf, size_t count);
 char* ft_strchr(const char* s, int c);
 extern int ft_strcmp(const char* s1, const char* s2);
@@ -300,10 +304,6 @@ void test_atoi_base() {
 	test_atoi_base_other_bases();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// WIP BELOW //////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 void print_list(t_list* lst, bool is_string) {
 	printflush("[%d elems]", ft_list_size(lst));
 	while (lst) {
@@ -312,14 +312,6 @@ void print_list(t_list* lst, bool is_string) {
 		if (lst) printflush(" ->");
 	}
 	printflush("\n");
-}
-
-void ft_list_clear(t_list* begin_list, void (*free_fct)(void*)) {
-	if (begin_list) {
-		ft_list_clear(begin_list->next, free_fct);
-		if (free_fct) free_fct(begin_list->data);
-		free(begin_list);
-	}
 }
 
 int increasing(void* data1, void* data2) { return data1 > data2 ? 1 : -1; }
@@ -339,30 +331,6 @@ int remove_all(void* data1, void* data2) {
 }
 
 void dont_free(void* data) { (void)data; }
-
-// void c_list_remove_if(t_list** begin_list, void* data_ref,
-// 					  int (*cmp)(void*, void*), void (*free_fct)(void*)) {
-// 	t_list* prev;
-// 	t_list* curr;
-// 	t_list* next;
-
-// 	if (begin_list == NULL) return;
-// 	prev = NULL;
-// 	curr = *begin_list;
-// 	while (curr) {
-// 		next = curr->next;
-// 		if (cmp(curr->data, data_ref) == 0) {
-// 			if (prev) prev->next = curr->next;
-// 			free_fct(curr->data);
-// 			free(curr);
-// 		} else {
-// 			if (prev == NULL) *begin_list = curr;
-// 			prev = curr;
-// 		}
-// 		curr = next;
-// 	}
-// 	if (prev == NULL) *begin_list = NULL;
-// }
 
 void test_lists_size_t() {
 	print_title("LISTS OF SIZE_T");
@@ -427,9 +395,17 @@ void test_lists_string() {
 	print_list(lst, true);
 }
 
+void test_output() {
+	print_title("OUTPUT");
+	ft_putstr("Je m'appelle");
+	ft_putchar(' ');
+	ft_putendl("Axel.");
+	ft_putstr("J'ai ");
+	ft_putunbr(25);
+	ft_putendl(" ans et j'aime le chocolat.");
+}
+
 int main(void) {
-	test_write();
-	test_read();
 	print_title("STRINGS");
 	test_isspace();
 	test_strchr();
@@ -438,8 +414,10 @@ int main(void) {
 	test_strdup();
 	test_strlen();
 	test_atoi_base();
+	test_write();
+	test_read();
 	test_lists_size_t();
 	test_lists_string();
-	// TODO: test put functions
+	test_output();
 	return (1 - perfect);
 }

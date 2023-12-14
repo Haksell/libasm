@@ -114,7 +114,7 @@ ft_list_remove_if:
         mov rsi, rsi
         call rdx
         FT_LIST_REMOVE_IF_POP_ALL
-        test rax, rax
+        test eax, eax
         jz .remove
         jmp .keep
         .remove:
@@ -123,15 +123,18 @@ ft_list_remove_if:
             mov r11, qword [r9 + 8]
             mov qword [r8 + 8], r11
             .remove_done:
+                test rcx, rcx
+                jz .free_node
                 FT_LIST_REMOVE_IF_PUSH_ALL
                 mov rdi, [r9]
                 call rcx
                 FT_LIST_REMOVE_IF_POP_ALL
-                FT_LIST_REMOVE_IF_PUSH_ALL
-                mov rdi, r9
-                call free
-                FT_LIST_REMOVE_IF_POP_ALL
-                jmp .continue_loop
+                .free_node:
+                    FT_LIST_REMOVE_IF_PUSH_ALL
+                    mov rdi, r9
+                    call free
+                    FT_LIST_REMOVE_IF_POP_ALL
+                    jmp .continue_loop
         .keep:
             test r8, r8
             jnz .keep_done
